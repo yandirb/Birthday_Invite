@@ -119,7 +119,7 @@ ADD TO CALENDAR
 
 <h3>Guests on this device</h3>
 
-<ul id="globalGuests"></ul>
+<ul id="guestList"></ul>
 
 </div>
 
@@ -169,7 +169,7 @@ confetti();
 }
 
 
-/*function saveGuest(name,guests){
+function saveGuest(name,guests){
 
 var list=JSON.parse(localStorage.getItem("guests")||"[]");
 
@@ -179,7 +179,7 @@ localStorage.setItem("guests",JSON.stringify(list));
 
 displayGuests();
 
-}*/
+}
 async function loadGuests(){
 
 let res = await fetch(
@@ -199,7 +199,7 @@ document.getElementById("globalGuests").innerText =
 }
 
 
-/*function displayGuests(){
+function displayGuests(){
 
 var list=JSON.parse(localStorage.getItem("guests")||"[]");
 
@@ -219,7 +219,7 @@ ul.appendChild(li);
 
 }
 
-displayGuests();*/
+displayGuests();
 async function updateGlobalGuests(add){
 
 let res = await fetch(

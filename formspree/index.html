@@ -1,12 +1,11 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Birthday Party RSVP</title>
+<title>Birthday Party</title>
 
 <style>
-
 body{
 font-family:Arial;
 text-align:center;
@@ -20,7 +19,6 @@ max-width:500px;
 margin:auto;
 padding:25px;
 border-radius:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 img{width:100%;border-radius:10px;}
@@ -42,11 +40,7 @@ color:white;
 font-size:18px;
 }
 
-#guestList{
-margin-top:20px;
-text-align:left;
-}
-
+.secondary{background:#34495e;}
 </style>
 </head>
 
@@ -61,102 +55,61 @@ text-align:left;
 <p><b>April 3, 2026 — 2:00 PM</b></p>
 <p>123 Party Street</p>
 
-<h3 id="countdown"></h3>
+<input id="name" name="name" placeholder="Your name">
+<input id="guests" name="guests" placeholder="Number of guests">
 
-<form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+<form action="https://formspree.io/f/xkoqjkzb" method="POST">
 
-<input name="name" id="name" placeholder="Your name">
+<input type="hidden" name="name" id="hiddenName">
+<input type="hidden" name="guests" id="hiddenGuests">
 
-<input name="guests" id="guests" placeholder="Number of guests">
-
-<button type="submit" onclick="confetti();addGuest()">YES I'M COMING 🎉</button>
+<button type="submit" onclick="prepareForm()">YES I'M COMING 🎉</button>
 
 </form>
 
 <button onclick="rsvpNo()">CAN'T MAKE IT 😢</button>
 
-<div id="guestCounter"></div>
-<div id="guestList"></div>
+<button class="secondary" onclick="textRSVP()">TEXT RSVP</button>
+
+<button class="secondary"
+onclick="location.href='https://maps.google.com/?q=123+Party+Street'">
+OPEN MAP
+</button>
+
+<button class="secondary"
+onclick="location.href='https://calendar.google.com/calendar/render?action=TEMPLATE&text=Birthday+Party&dates=20260403T140000/20260403T170000&location=123+Party+Street'">
+ADD TO CALENDAR
+</button>
 
 </div>
 
 <script>
 
-var partyDate=new Date("April 3, 2026 14:00:00").getTime();
+function prepareForm(){
+document.getElementById("hiddenName").value=
+document.getElementById("name").value;
 
-setInterval(function(){
-
-var now=new Date().getTime();
-var distance=partyDate-now;
-
-var d=Math.floor(distance/(1000*60*60*24));
-var h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-var m=Math.floor((distance%(1000*60*60))/(1000*60));
-
-document.getElementById("countdown").innerHTML=
-"⏳ "+d+" days "+h+"h "+m+"m";
-
-},1000);
-
-function rsvpNo(){
-window.location.href="sms:7021234567?body=RSVP NO Birthday Party";
+document.getElementById("hiddenGuests").value=
+document.getElementById("guests").value;
 }
 
-function addGuest(){
+function rsvpNo(){
+var name=document.getElementById("name").value;
 
+window.location.href="sms:7021234567?body="+
+encodeURIComponent("Hi this is "+name+" RSVP NO for the Birthday Party");
+}
+
+function textRSVP(){
 var name=document.getElementById("name").value;
 var guests=document.getElementById("guests").value;
 
-var list=JSON.parse(localStorage.getItem("guests")||"[]");
-
-list.push({name:name,guests:guests});
-
-localStorage.setItem("guests",JSON.stringify(list));
-
-renderGuests();
-}
-
-function renderGuests(){
-
-var list=JSON.parse(localStorage.getItem("guests")||"[]");
-
-var total=0;
-var html="<h3>👥 Guests coming</h3>";
-
-list.forEach(g=>{
-total+=Number(g.guests||1);
-html+=g.name+" +"+g.guests+"<br>";
-});
-
-document.getElementById("guestList").innerHTML=html;
-document.getElementById("guestCounter").innerHTML=
-"<h3>"+total+" guests attending</h3>";
-}
-
-renderGuests();
-
-function confetti(){
-for(let i=0;i<40;i++){
-let c=document.createElement("div");
-c.style.position="fixed";
-c.style.width="8px";
-c.style.height="8px";
-c.style.background="hsl("+Math.random()*360+",100%,50%)";
-c.style.left=Math.random()*100+"vw";
-c.style.top="-10px";
-document.body.appendChild(c);
-
-let fall=setInterval(()=>{
-c.style.top=parseInt(c.style.top)+5+"px";
-if(parseInt(c.style.top)>window.innerHeight){
-clearInterval(fall);
-c.remove();
-}
-},20);
-}
+window.location.href="sms:7021234567?body="+
+encodeURIComponent("Hi this is "+name+" ("+guests+" guests) RSVP for the Birthday Party");
 }
 
 </script>
 
 </body>
 </html>
+```

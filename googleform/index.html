@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Birthday Party RSVP</title>
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+background:linear-gradient(135deg,#0f4c81,#5dade2);
+padding:20px;
+}
+
+.card{
+background:white;
+max-width:500px;
+margin:auto;
+padding:25px;
+border-radius:15px;
+}
+
+img{width:100%;border-radius:10px;}
+
+input{
+width:80%;
+padding:10px;
+margin:8px;
+}
+
+button{
+width:85%;
+padding:14px;
+margin:10px auto;
+border:none;
+border-radius:8px;
+background:#1f78d1;
+color:white;
+font-size:18px;
+}
+
+.secondary{
+background:#34495e;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>🎉 Birthday Party 🎉</h1>
+
+<img src="../invitation.jpg">
+
+<p><b>April 3, 2026 — 2:00 PM</b></p>
+<p>123 Party Street</p>
+
+<h3 id="countdown"></h3>
+
+<input id="name" placeholder="Your name">
+<input id="guests" placeholder="Number of guests">
+
+<button onclick="googleRSVP('Yes')">YES I'M COMING 🎉</button>
+
+<button onclick="googleRSVP('No')">CAN'T MAKE IT 😢</button>
+
+<button class="secondary" onclick="textRSVP()">TEXT RSVP</button>
+
+</div>
+
+<script>
+
+var partyDate=new Date("April 3, 2026 14:00:00").getTime();
+
+setInterval(function(){
+
+var now=new Date().getTime();
+var distance=partyDate-now;
+
+var d=Math.floor(distance/(1000*60*60*24));
+var h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+var m=Math.floor((distance%(1000*60*60))/(1000*60));
+
+document.getElementById("countdown").innerHTML=
+"⏳ "+d+" days "+h+"h "+m+"m";
+
+},1000);
+
+function googleRSVP(answer){
+
+var name=document.getElementById("name").value;
+var guests=document.getElementById("guests").value;
+
+var formURL="https://forms.gle/2FivXmaJhizrDZEQ9";
+
+formURL=formURL
+.replace("NAME",encodeURIComponent(name))
+.replace("GUESTS",encodeURIComponent(guests))
+.replace("ANSWER",answer);
+
+window.location.href=formURL;
+}
+
+function textRSVP(){
+
+var name=document.getElementById("name").value;
+var guests=document.getElementById("guests").value;
+
+var msg="Hi this is "+name+" ("+guests+" guests) RSVP for the Birthday Party";
+
+window.location.href="sms:7021234567?body="+encodeURIComponent(msg);
+}
+
+</script>
+
+</body>
+</html>

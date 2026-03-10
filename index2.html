@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sofia Birthday Party</title>
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+background:#ffe6f3;
+padding:20px;
+}
+
+.card{
+background:white;
+max-width:500px;
+margin:auto;
+padding:25px;
+border-radius:15px;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+img{
+width:100%;
+border-radius:10px;
+}
+
+input{
+width:80%;
+padding:10px;
+margin:8px;
+font-size:16px;
+}
+
+button{
+display:block;
+width:80%;
+margin:10px auto;
+padding:14px;
+font-size:18px;
+border:none;
+border-radius:8px;
+background:#ff4da6;
+color:white;
+}
+
+.secondary{
+background:#6c63ff;
+}
+
+#guestList{
+margin-top:20px;
+text-align:left;
+}
+
+.balloon{
+position:fixed;
+bottom:-100px;
+width:40px;
+height:50px;
+border-radius:50%;
+animation:float 12s infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>🎉 Sofia's Birthday 🎉</h1>
+
+<img src="invitation.jpg">
+
+<p>April 3 – 2:00 PM</p>
+<p>123 Party Street</p>
+
+<h3 id="countdown"></h3>
+
+<input id="name" placeholder="Your Name">
+
+<input id="guests" placeholder="Number of guests">
+
+<button onclick="rsvpYes()">YES I'M COMING 🎉</button>
+
+<button onclick="rsvpNo()">CAN'T MAKE IT 😢</button>
+
+<button class="secondary"
+onclick="location.href='https://maps.google.com/?q=123+Party+Street'">
+OPEN MAP
+</button>
+
+<div id="guestCounter"></div>
+
+<div id="guestList"></div>
+
+</div>
+
+<script>
+
+var partyDate = new Date("May 14, 2026 15:00:00").getTime();
+
+setInterval(function(){
+
+var now = new Date().getTime();
+var distance = partyDate-now;
+
+if(distance<0){
+document.getElementById("countdown").innerHTML="🎉 The party is today!";
+return;
+}
+
+var d=Math.floor(distance/(1000*60*60*24));
+var h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+var m=Math.floor((distance%(1000*60*60))/(1000*60));
+
+document.getElementById("countdown").innerHTML=
+"⏳ "+d+" days "+h+"h "+m+"m";
+
+},1000);
+
+function rsvpYes(){
+
+confetti();
+
+var name=document.getElementById("name").value;
+var guests=document.getElementById("guests").value;
+
+var msg="Hi this is "+name+" ("+guests+" guests) RSVP YES for Sofia Birthday";
+
+window.location.href="sms:7021234567?body="+encodeURIComponent(msg);
+
+addGuest(name,guests);
+
+}
+
+function rsvpNo(){
+
+var name=document.getElementById("name").value;
+
+var msg="Hi this is "+name+" RSVP NO for Sofia Birthday";
+
+window.location.href="sms:7021234567?body="+encodeURIComponent(msg);
+
+}
+
+function addGuest(name,guests){
+
+var list=JSON.parse(localStorage.getItem("guests")||"[]");
+
+list.push({name:name,guests:guests});
+
+localStorage.setItem("guests",JSON.stringify(list));
+
+renderGuests();
+
+}
+
+function renderGuests(){
+
+var list=JSON.parse(localStorage.getItem("guests")||"[]");
+
+var total=0;
+var html="<h3>👥 Guests coming</h3>";
+
+list.forEach(g=>{
+total+=Number(g.guests||1);
+html+=g.name+" +"+g.guests+"<br>";
+});
+
+document.getElementById("guestList").innerHTML=html;
+
+document.getElementById("guestCounter").innerHTML=
+"<h3>"+total+" guests attending</h3>";
+
+}
+
+renderGuests();
+
+function confetti(){
+
+for(let i=0;i<40;i++){
+
+let c=document.createElement("div");
+
+c.style.position="fixed";
+c.style.width="8px";
+c.style.height="8px";
+c.style.background="hsl("+Math.random()*360+",100%,50%)";
+c.style.left=Math.random()*100+"vw";
+c.style.top="-10px";
+
+document.body.appendChild(c);
+
+let fall=setInterval(()=>{
+
+c.style.top=parseInt(c.style.top)+5+"px";
+
+if(parseInt(c.style.top)>window.innerHeight){
+
+clearInterval(fall);
+c.remove();
+
+}
+
+},20);
+
+}
+
+}
+
+for(let i=0;i<8;i++){
+
+let b=document.createElement("div");
+
+b.className="balloon";
+
+b.style.left=Math.random()*100+"vw";
+
+b.style.background="hsl("+Math.random()*360+",70%,60%)";
+
+b.style.animationDuration=(8+Math.random()*6)+"s";
+
+document.body.appendChild(b);
+
+}
+
+</script>
+
+</body>
+</html>

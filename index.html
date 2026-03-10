@@ -2,15 +2,17 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sofia Birthday Party</title>
+
+<title>Birthday Party</title>
 
 <style>
 
 body{
 font-family:Arial;
 text-align:center;
-background:#ffe6f3;
+background:linear-gradient(135deg,#0f4c81,#5dade2);
 padding:20px;
+color:#333;
 }
 
 .card{
@@ -19,7 +21,7 @@ max-width:500px;
 margin:auto;
 padding:25px;
 border-radius:15px;
-box-shadow:0 8px 20px rgba(0,0,0,0.2);
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 img{
@@ -36,23 +38,27 @@ font-size:16px;
 
 button{
 display:block;
-width:80%;
+width:85%;
 margin:10px auto;
 padding:14px;
 font-size:18px;
 border:none;
 border-radius:8px;
-background:#ff4da6;
+background:#1f78d1;
 color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#155a9c;
 }
 
 .secondary{
-background:#6c63ff;
+background:#34495e;
 }
 
-#guestList{
-margin-top:20px;
-text-align:left;
+.secondary:hover{
+background:#2c3e50;
 }
 
 .balloon{
@@ -62,6 +68,7 @@ width:40px;
 height:50px;
 border-radius:50%;
 animation:float 12s infinite;
+opacity:0.9;
 }
 
 @keyframes float{
@@ -70,24 +77,22 @@ animation:float 12s infinite;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="card">
 
-<h1>🎉 Sofia's Birthday 🎉</h1>
+<h1>🎉 Birthday Party 🎉</h1>
 
 <img src="invitation.jpg">
 
-<p>April 3 – 2:00 PM</p>
+<p><b>April 3, 2026 — 2:00 PM</b></p>
 <p>123 Party Street</p>
 
 <h3 id="countdown"></h3>
 
-<input id="name" placeholder="Your Name">
-
+<input id="name" placeholder="Your name">
 <input id="guests" placeholder="Number of guests">
 
 <button onclick="rsvpYes()">YES I'M COMING 🎉</button>
@@ -95,24 +100,28 @@ animation:float 12s infinite;
 <button onclick="rsvpNo()">CAN'T MAKE IT 😢</button>
 
 <button class="secondary"
+onclick="textRSVP()">TEXT RSVP</button>
+
+<button class="secondary"
 onclick="location.href='https://maps.google.com/?q=123+Party+Street'">
 OPEN MAP
 </button>
 
-<div id="guestCounter"></div>
-
-<div id="guestList"></div>
+<button class="secondary"
+onclick="location.href='https://calendar.google.com/calendar/render?action=TEMPLATE&text=Birthday+Party&dates=20260403T140000/20260403T170000&details=Birthday+Party&location=123+Party+Street'">
+ADD TO CALENDAR
+</button>
 
 </div>
 
 <script>
 
-var partyDate = new Date("May 14, 2026 15:00:00").getTime();
+var partyDate=new Date("April 3, 2026 14:00:00").getTime();
 
 setInterval(function(){
 
-var now = new Date().getTime();
-var distance = partyDate-now;
+var now=new Date().getTime();
+var distance=partyDate-now;
 
 if(distance<0){
 document.getElementById("countdown").innerHTML="🎉 The party is today!";
@@ -124,7 +133,7 @@ var h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
 var m=Math.floor((distance%(1000*60*60))/(1000*60));
 
 document.getElementById("countdown").innerHTML=
-"⏳ "+d+" days "+h+"h "+m+"m";
+"⏳ "+d+" days "+h+"h "+m+"m until the party!";
 
 },1000);
 
@@ -135,11 +144,9 @@ confetti();
 var name=document.getElementById("name").value;
 var guests=document.getElementById("guests").value;
 
-var msg="Hi this is "+name+" ("+guests+" guests) RSVP YES for Sofia Birthday";
+var msg="Hi this is "+name+" ("+guests+" guests) RSVP YES for the Birthday Party";
 
 window.location.href="sms:7021234567?body="+encodeURIComponent(msg);
-
-addGuest(name,guests);
 
 }
 
@@ -147,44 +154,22 @@ function rsvpNo(){
 
 var name=document.getElementById("name").value;
 
-var msg="Hi this is "+name+" RSVP NO for Sofia Birthday";
+var msg="Hi this is "+name+" RSVP NO for the Birthday Party";
 
 window.location.href="sms:7021234567?body="+encodeURIComponent(msg);
 
 }
 
-function addGuest(name,guests){
+function textRSVP(){
 
-var list=JSON.parse(localStorage.getItem("guests")||"[]");
+var name=document.getElementById("name").value;
+var guests=document.getElementById("guests").value;
 
-list.push({name:name,guests:guests});
+var msg="Hi this is "+name+" ("+guests+" guests) RSVP for the Birthday Party";
 
-localStorage.setItem("guests",JSON.stringify(list));
-
-renderGuests();
-
-}
-
-function renderGuests(){
-
-var list=JSON.parse(localStorage.getItem("guests")||"[]");
-
-var total=0;
-var html="<h3>👥 Guests coming</h3>";
-
-list.forEach(g=>{
-total+=Number(g.guests||1);
-html+=g.name+" +"+g.guests+"<br>";
-});
-
-document.getElementById("guestList").innerHTML=html;
-
-document.getElementById("guestCounter").innerHTML=
-"<h3>"+total+" guests attending</h3>";
+window.location.href="sms:7021234567?body="+encodeURIComponent(msg);
 
 }
-
-renderGuests();
 
 function confetti(){
 
@@ -218,7 +203,7 @@ c.remove();
 
 }
 
-for(let i=0;i<8;i++){
+for(let i=0;i<10;i++){
 
 let b=document.createElement("div");
 
